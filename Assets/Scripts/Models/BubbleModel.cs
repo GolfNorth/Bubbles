@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Bubbles
+﻿namespace Bubbles
 {
     public sealed class BubbleModel
     {
