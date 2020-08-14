@@ -32,7 +32,6 @@ namespace Bubbles
         {
             set
             {
-                
                 _model.Radius = _difficultSettings.MinRadius +
                                 (_difficultSettings.MaxRadius - _difficultSettings.MinRadius) * (1 - value);
                 _model.Speed = _difficultSettings.MinSpeed +
@@ -56,7 +55,7 @@ namespace Bubbles
             _gameObject = gameObject;
             _transform = gameObject.transform;
             _collider = gameObject.GetComponent<SphereCollider>();
-            _bubblesManager = SceneContext.Instance.BubblesManager; 
+            _bubblesManager = SceneContext.Instance.BubblesManager;
             _updateManager = SceneContext.Instance.UpdateManager;
             _updateManager.Add(this);
             _difficultSettings = SceneContext.Instance.DifficultSettings;
@@ -66,11 +65,11 @@ namespace Bubbles
         {
             _updateManager?.Remove(this);
         }
-        
+
         public void Disable()
         {
             if (!_active) return;
-            
+
             _gameObject.SetActive(false);
             _active = false;
         }
@@ -78,15 +77,15 @@ namespace Bubbles
         public void Enable()
         {
             if (_active) return;
-            
+
             _gameObject.SetActive(true);
             _active = true;
         }
-        
+
         public void Hit()
         {
             if (!_active) return;
-            
+
             _bubblesManager.Destroy(this, true);
         }
 
@@ -95,10 +94,11 @@ namespace Bubbles
             if (!_active) return;
 
             var position = _transform.position;
-            
+
             if (Mathf.Abs(position.y - _targetPosition.y) < 0.01f) _bubblesManager.Destroy(this);
-            
-            var newPosition = Vector3.MoveTowards(position, _targetPosition, _model.Speed * _bubblesManager.SpeedFactor);
+
+            var newPosition =
+                Vector3.MoveTowards(position, _targetPosition, _model.Speed * _bubblesManager.SpeedFactor);
 
             _transform.position = newPosition;
         }

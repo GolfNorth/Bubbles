@@ -16,7 +16,7 @@ namespace Bubbles
         private static T _instance;
 
         #endregion
-        
+
 
         #region Properties
 
@@ -33,19 +33,19 @@ namespace Bubbles
                                      "' already destroyed. Returning null.");
                     return null;
                 }
- 
+
                 lock (_lock)
                 {
                     if (_instance != null) return _instance;
-                    
+
                     _instance = (T) FindObjectOfType(typeof(T));
-                    
+
                     if (_instance != null) return _instance;
-                    
+
                     var singletonObject = new GameObject();
                     _instance = singletonObject.AddComponent<T>();
                     singletonObject.name = typeof(T) + " (Singleton)";
-                    
+
                     DontDestroyOnLoad(singletonObject);
 
                     return _instance;
@@ -62,7 +62,7 @@ namespace Bubbles
         {
             _shuttingDown = true;
         }
-        
+
         private void OnDestroy()
         {
             _shuttingDown = true;

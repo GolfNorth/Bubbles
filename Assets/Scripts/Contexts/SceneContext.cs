@@ -9,7 +9,7 @@ namespace Bubbles
         [SerializeField] private ScoreSettings _scoreSettings;
         [SerializeField] private GameObject _bubblePrefab;
         [SerializeField] private Camera _camera;
-        
+
         private UpdateManager _updateManager;
         private TimeManager _timeManager;
         private BubblesManager _bubblesManager;
@@ -33,7 +33,7 @@ namespace Bubbles
         public DifficultSettings DifficultSettings => _difficultSettings;
 
         public RoundSettings RoundSettings => _roundSettings;
-        
+
         public ScoreSettings ScoreSettings => _scoreSettings;
 
         private void Awake()

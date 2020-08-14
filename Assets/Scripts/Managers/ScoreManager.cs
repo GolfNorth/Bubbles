@@ -10,18 +10,18 @@ namespace Bubbles
         private readonly ScoreSettings _scoreSettings;
         private readonly TimeManager _timeManager;
         private readonly BubblesManager _bubblesManager;
-        
+
         public ScoreManager()
         {
             _difficultSettings = SceneContext.Instance.DifficultSettings;
             _scoreSettings = SceneContext.Instance.ScoreSettings;
             _timeManager = SceneContext.Instance.TimeManager;
             _bubblesManager = SceneContext.Instance.BubblesManager;
-            
+
             _bubblesManager.BubbleHit += OnBubbleHit;
             _timeManager.RoundStarted += OnTimeStarted;
         }
-        
+
         public void Dispose()
         {
             _bubblesManager.BubbleHit -= OnBubbleHit;

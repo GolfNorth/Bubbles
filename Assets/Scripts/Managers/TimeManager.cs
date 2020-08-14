@@ -13,10 +13,11 @@ namespace Bubbles
         private readonly UpdateManager _updateManager;
 
         public delegate void RoundHandler();
+
         public event RoundHandler RoundCountdown;
         public event RoundHandler RoundStarted;
         public event RoundHandler RoundEnded;
-        
+
         public TimeManager()
         {
             _roundSettings = SceneContext.Instance.RoundSettings;
@@ -26,7 +27,7 @@ namespace Bubbles
         }
 
         public int Timer => Mathf.CeilToInt(_timer);
-        
+
         public int Countdown => Mathf.CeilToInt(_countdown);
 
         public float RelativeTimer => _timer / _roundSettings.Duration;
@@ -38,7 +39,7 @@ namespace Bubbles
         public void Start()
         {
             if (_gameState == GameState.Countdown) return;
-            
+
             _gameState = GameState.Countdown;
             _isStarted = false;
             _timer = 0;
@@ -46,15 +47,15 @@ namespace Bubbles
 
             _updateManager.StartCoroutine(StartCountdown());
         }
-        
+
         private IEnumerator StartCountdown()
         {
             RoundCountdown?.Invoke();
-            
-            while(_countdown > 0)
+
+            while (_countdown > 0)
             {
                 _countdown -= Time.deltaTime;
-                
+
                 yield return null;
             }
 
@@ -62,18 +63,18 @@ namespace Bubbles
             _isStarted = true;
 
             RoundStarted?.Invoke();
-            
+
             _updateManager.StartCoroutine(StartTimer());
         }
-        
+
         private IEnumerator StartTimer()
         {
             var duration = _roundSettings.Duration;
-            
-            while(duration > _timer)
+
+            while (duration > _timer)
             {
                 _timer += Time.deltaTime;
-                
+
                 yield return null;
             }
 

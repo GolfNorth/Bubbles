@@ -23,13 +23,10 @@ namespace Bubbles
 
         public GameObject Acquire(Vector3 position = new Vector3(), Quaternion rotation = new Quaternion())
         {
-            var go = _pool.Count == 0 ? GameObject.Instantiate(_prefab) : _pool.Dequeue();
-            
-            if (_parent != null)
-            {
-                go.transform.SetParent(_parent);
-            }
-            
+            var go = _pool.Count == 0 ? Object.Instantiate(_prefab) : _pool.Dequeue();
+
+            if (_parent != null) go.transform.SetParent(_parent);
+
             go.transform.position = position;
             go.transform.rotation = rotation;
             go.SetActive(true);

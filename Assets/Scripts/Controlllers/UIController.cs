@@ -20,7 +20,7 @@ namespace Bubbles
             _timerComponent = timerComponent;
             _gameOverComponent = gameOverComponent;
             _countdownComponent = countdownComponent;
-            
+
             _timeManager = SceneContext.Instance.TimeManager;
             _timeManager.RoundCountdown += OnTimeCountdown;
             _timeManager.RoundStarted += OnTimeStarted;
@@ -30,7 +30,7 @@ namespace Bubbles
 
             _updateManager = SceneContext.Instance.UpdateManager;
             _updateManager.Add(this);
-            
+
             _scoreComponent.gameObject.SetActive(false);
             _timerComponent.gameObject.SetActive(false);
             _gameOverComponent.gameObject.SetActive(false);
@@ -44,7 +44,7 @@ namespace Bubbles
             _timeManager.RoundEnded -= OnTimeEnded;
             _updateManager.Remove(this);
         }
-        
+
         private void OnTimeCountdown()
         {
             _gameOverComponent.gameObject.SetActive(false);
