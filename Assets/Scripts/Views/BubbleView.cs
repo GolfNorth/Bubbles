@@ -2,29 +2,14 @@
 {
     public class BubbleView : BaseView<BubbleController>
     {
-        private void Awake()
-        {
-            controller = new BubbleController(gameObject);
-        }
-
         private void OnDestroy()
         {
-            controller.Dispose();
-        }
-
-        private void OnDisable()
-        {
-            controller.Disable();
-        }
-
-        private void OnEnable()
-        {
-            controller.Enable();
+            Controller.Dispose();
         }
 
         private void OnMouseDown()
         {
-            controller.Hit();
+            Controller.Hit();
         }
     }
 }

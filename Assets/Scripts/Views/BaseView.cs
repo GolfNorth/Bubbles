@@ -6,6 +6,10 @@ namespace Bubbles
     {
         protected TController controller;
 
-        public TController Controller => controller;
+        public TController Controller
+        {
+            get => controller;
+            set => controller = value;
+        }
     }
 }

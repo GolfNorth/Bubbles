@@ -2,14 +2,15 @@
 
 namespace Bubbles
 {
-    public class BubbleController : IController<BubbleController>, ITickable
+    public class BubbleController : IController<BubbleController>, IPoolable, ITickable
     {
-        private bool _active;
-        private BubbleModel _model;
+        private BubbleView _view;
         private GameObject _gameObject;
         private Transform _transform;
         private SphereCollider _collider;
         private Vector3 _targetPosition;
+        private readonly BubbleModel _model;
+        private readonly GameObject _prefab;
         private readonly UpdateManager _updateManager;
         private readonly BubblesManager _bubblesManager;
         private readonly DifficultSettings _difficultSettings;
@@ -20,12 +21,13 @@ namespace Bubbles
 
         public Vector3 Position
         {
-            get => _model.Position;
-            set
-            {
-                _transform.position = value;
-                _model.Position = value;
-            }
+            get => _transform.position;
+            set => _transform.position = value;
+        }
+
+        public Vector3 TargetPosition
+        {
+            set => _targetPosition = value;
         }
 
         public float Speed
@@ -43,22 +45,14 @@ namespace Bubbles
             }
         }
 
-        public Vector3 TargetPosition
+        public BubbleController()
         {
-            set => _targetPosition = value;
-        }
-
-        public BubbleController(GameObject gameObject)
-        {
-            _active = true;
             _model = new BubbleModel();
-            _gameObject = gameObject;
-            _transform = gameObject.transform;
-            _collider = gameObject.GetComponent<SphereCollider>();
             _bubblesManager = SceneContext.Instance.BubblesManager;
             _updateManager = SceneContext.Instance.UpdateManager;
             _updateManager.Add(this);
             _difficultSettings = SceneContext.Instance.DifficultSettings;
+            _prefab = SceneContext.Instance.BubblePrefab;
         }
 
         public void Dispose()
@@ -66,32 +60,44 @@ namespace Bubbles
             _updateManager?.Remove(this);
         }
 
-        public void Disable()
-        {
-            if (!_active) return;
+        public bool IsEnabled { get; set; }
 
-            _gameObject.SetActive(false);
-            _active = false;
+        public void Initialize()
+        {
+            _gameObject = Object.Instantiate(_prefab);
+            _transform = _gameObject.transform;
+            _collider = _gameObject.GetComponent<SphereCollider>();
+            _view = _gameObject.GetComponent<BubbleView>();
+            _view.Controller = this;
+            _model.Active = true;
         }
 
         public void Enable()
         {
-            if (_active) return;
+            if (_model.Active) return;
 
             _gameObject.SetActive(true);
-            _active = true;
+            _model.Active = true;
+        }
+
+        public void Disable()
+        {
+            if (!_model.Active) return;
+
+            _gameObject.SetActive(false);
+            _model.Active = false;
         }
 
         public void Hit()
         {
-            if (!_active) return;
+            if (!_model.Active) return;
 
             _bubblesManager.Destroy(this, true);
         }
 
         public void Tick()
         {
-            if (!_active) return;
+            if (!_model.Active) return;
 
             var position = _transform.position;
 

@@ -4,9 +4,15 @@ namespace Bubbles
 {
     public sealed class BubbleModel
     {
+        private bool _active;
         private float _speed;
         private float _radius;
-        private Vector3 _position;
+
+        public bool Active
+        {
+            get => _active;
+            set => _active = value;
+        }
 
         public float Speed
         {
@@ -18,12 +24,6 @@ namespace Bubbles
         {
             get => _radius;
             set => _radius = value;
-        }
-
-        public Vector3 Position
-        {
-            get => _position;
-            set => _position = value;
         }
     }
 }

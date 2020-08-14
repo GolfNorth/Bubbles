@@ -7,8 +7,7 @@ namespace Bubbles
 {
     public sealed class BubblesManager : ITickable, IDisposable
     {
-        private readonly List<BubbleController> _bubbleControllers;
-        private readonly ObjectPool _objectPool;
+        private readonly ObjectPool<BubbleController> _bubblesPool;
         private readonly TimeManager _timeManager;
         private readonly UpdateManager _updateManager;
         private readonly BoundsManager _boundsManager;
@@ -25,8 +24,7 @@ namespace Bubbles
         public BubblesManager()
         {
             _speedFactor = 1f;
-            _bubbleControllers = new List<BubbleController>();
-            _objectPool = new ObjectPool(SceneContext.Instance.BubblePrefab);
+            _bubblesPool = new ObjectPool<BubbleController>();
             _difficultSettings = SceneContext.Instance.DifficultSettings;
             _timeManager = SceneContext.Instance.TimeManager;
             _timeManager.RoundEnded += OnTimeEnded;
@@ -50,20 +48,18 @@ namespace Bubbles
 
         public void Tick()
         {
-            if (!_timeManager.IsStarted || _bubbleControllers.Count >= _difficultSettings.MaxAmount) return;
+            if (!_timeManager.IsStarted || _bubblesPool.Count >= _difficultSettings.MaxAmount) return;
 
             _speedFactor = 1f + (_difficultSettings.FinalSpeedFactor - 1f) * _timeManager.RelativeTimer;
             _passedAfterSpawn += Time.deltaTime;
 
-            if (_bubbleControllers.Count == 0 || _passedAfterSpawn > _difficultSettings.SpawnDelay)
+            if (_bubblesPool.Count == 0 || _passedAfterSpawn > _difficultSettings.SpawnDelay)
                 Spawn();
         }
 
         public void Spawn()
         {
-            var position = new Vector3();
-            var bubble = _objectPool.Acquire(position);
-            var controller = bubble.GetComponent<BubbleView>().Controller;
+            var controller = _bubblesPool.Acquire();
             controller.Speed = Random.Range(0, 100f) / 100f;
             controller.Position = new Vector3(
                 Random.Range(_boundsManager.LeftBound, _boundsManager.RightBound),
@@ -74,16 +70,12 @@ namespace Bubbles
                 _boundsManager.TopBound
             );
 
-            _bubbleControllers.Add(controller);
-
             _passedAfterSpawn = 0;
         }
 
         public void Destroy(BubbleController controller, bool hit = false)
         {
-            if (!_bubbleControllers.Remove(controller)) return;
-
-            _objectPool.Release(controller.GameObject);
+            _bubblesPool.Release(controller);
 
             if (hit)
                 BubbleHit?.Invoke(controller.Radius);
@@ -91,7 +83,9 @@ namespace Bubbles
 
         private void DestroyAll()
         {
-            foreach (var controller in _bubbleControllers) controller.Disable();
+            foreach (var controller in _bubblesPool.All)
+                if (controller.IsEnabled)
+                    _bubblesPool.Release(controller);
         }
     }
 }

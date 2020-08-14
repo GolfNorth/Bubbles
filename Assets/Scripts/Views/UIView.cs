@@ -12,12 +12,12 @@ namespace Bubbles
 
         private void Awake()
         {
-            controller = new UIController(_scoreComponent, _timerComponent, _gameOverComponent, _countdownComponent);
+            Controller = new UIController(_scoreComponent, _timerComponent, _gameOverComponent, _countdownComponent);
         }
 
         private void OnDestroy()
         {
-            controller.Dispose();
+            Controller.Dispose();
         }
     }
 }

@@ -1,43 +1,54 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace Bubbles
 {
-    public sealed class ObjectPool
+    public sealed class ObjectPool<T> where T : IPoolable, new()
     {
-        private readonly GameObject _prefab;
-        private Transform _parent;
-        private readonly Queue<GameObject> _pool;
+        private readonly Queue<T> _queue;
+        private readonly HashSet<T> _pool;
+        private int _count;
 
-        public ObjectPool(GameObject prefab)
+        public int Count => _count;
+
+        public IEnumerable<T> All => _pool;
+
+        public ObjectPool()
         {
-            _prefab = prefab;
-            _pool = new Queue<GameObject>();
+            _queue = new Queue<T>();
+            _pool = new HashSet<T>();
+            _count = 0;
         }
 
-        public Transform Parent
+        public T Acquire()
         {
-            get => _parent;
-            set => _parent = value;
+            T obj;
+
+            if (_queue.Count == 0)
+            {
+                obj = new T();
+                obj.Initialize();
+                obj.IsEnabled = true;
+                _pool.Add(obj);
+            }
+            else
+            {
+                obj = _queue.Dequeue();
+                obj.Enable();
+                obj.IsEnabled = true;
+            }
+
+            _count++;
+
+            return obj;
         }
 
-        public GameObject Acquire(Vector3 position = new Vector3(), Quaternion rotation = new Quaternion())
+        public void Release(T obj)
         {
-            var go = _pool.Count == 0 ? Object.Instantiate(_prefab) : _pool.Dequeue();
+            obj.Disable();
+            obj.IsEnabled = false;
+            _queue.Enqueue(obj);
 
-            if (_parent != null) go.transform.SetParent(_parent);
-
-            go.transform.position = position;
-            go.transform.rotation = rotation;
-            go.SetActive(true);
-
-            return go;
-        }
-
-        public void Release(GameObject go)
-        {
-            _pool.Enqueue(go);
-            go.SetActive(false);
+            _count--;
         }
     }
 }
