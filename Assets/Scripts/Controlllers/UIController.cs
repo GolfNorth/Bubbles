@@ -20,8 +20,6 @@ namespace Bubbles
             _timerComponent = timerComponent;
             _gameOverComponent = gameOverComponent;
             _countdownComponent = countdownComponent;
-
-            Debug.Log(1);
             
             _roundManager = SceneContext.Instance.RoundManager;
             _roundManager.RoundCountdown += OnRoundCountdown;

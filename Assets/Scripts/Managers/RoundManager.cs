@@ -47,8 +47,6 @@ namespace Bubbles
         
         private IEnumerator StartCountdown()
         {
-            Debug.Log(3);
-            
             RoundCountdown?.Invoke();
             
             while(_countdown > 0)

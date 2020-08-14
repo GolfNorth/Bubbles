@@ -65,7 +65,7 @@ namespace Bubbles
         {
             if (!_active) return;
             
-            Debug.Log("Bubble");
+            //Debug.Log("Bubble");
         }
     }
 }
