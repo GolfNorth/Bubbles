@@ -29,6 +29,8 @@ namespace Bubbles
         
         public int Countdown => Mathf.CeilToInt(_countdown);
 
+        public float RelativeTimer => _timer / _roundSettings.Duration;
+
         public bool IsStarted => _isStarted;
 
         public GameState GameState => _gameState;

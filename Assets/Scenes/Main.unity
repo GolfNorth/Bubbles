@@ -235,6 +235,7 @@ MonoBehaviour:
   _roundSettings: {fileID: 11400000, guid: fadae06beecc47340b5e95ea22a1f64e, type: 2}
   _scoreSettings: {fileID: 11400000, guid: 71ab143bbebe5b24b90f73b4cda1cd99, type: 2}
   _bubblePrefab: {fileID: 2554882249672327926, guid: 62f1759e0903dff4cb794f5d6232d5df, type: 3}
+  _camera: {fileID: 519420031}
 --- !u!4 &317073399
 Transform:
   m_ObjectHideFlags: 0

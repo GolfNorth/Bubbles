@@ -18,13 +18,13 @@ namespace Bubbles
             _timeManager = SceneContext.Instance.TimeManager;
             _bubblesManager = SceneContext.Instance.BubblesManager;
             
-            _bubblesManager.BubbleDestroyed += OnBubbleDestroyed;
+            _bubblesManager.BubbleHit += OnBubbleHit;
             _timeManager.RoundStarted += OnTimeStarted;
         }
         
         public void Dispose()
         {
-            _bubblesManager.BubbleDestroyed -= OnBubbleDestroyed;
+            _bubblesManager.BubbleHit -= OnBubbleHit;
             _timeManager.RoundStarted -= OnTimeStarted;
         }
 
@@ -33,10 +33,11 @@ namespace Bubbles
             _score = 0;
         }
 
-        private void OnBubbleDestroyed(float radius)
+        private void OnBubbleHit(float radius)
         {
-            _score += _scoreSettings.AveragePoints * radius /
-                      (_difficultSettings.MaxRadius - _difficultSettings.MinRadius);
+            _score += _scoreSettings.MinPoints + (_scoreSettings.MaxPoints - _scoreSettings.MinPoints) *
+                (1 - (radius - _difficultSettings.MinRadius) /
+                    (_difficultSettings.MaxRadius - _difficultSettings.MinRadius));
         }
 
         public int Score => Mathf.CeilToInt(_score);

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3819ff9f612c4f69b9348cb6204a57be, type: 3}
   m_Name: ScoreSettings
   m_EditorClassIdentifier: 
-  averagePoints: 150
+  minPoints: 100
+  maxPoints: 500

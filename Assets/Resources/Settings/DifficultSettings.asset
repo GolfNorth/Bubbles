@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca9dfe93dbb75514089d8645f3dad57b, type: 3}
   m_Name: DifficultSettings
   m_EditorClassIdentifier: 
-  maxAmount: 10
-  spawnDelay: 0.5
-  minSpeed: 10
-  maxSpeed: 30
+  maxAmount: 20
+  spawnDelay: 0.3
+  minSpeed: 0.01
+  maxSpeed: 0.03
   finalSpeedFactor: 1.5
-  minRadius: 2
-  maxRadius: 4
+  minRadius: 0.15
+  maxRadius: 0.4
