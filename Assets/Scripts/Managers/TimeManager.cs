@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Bubbles
 {
-    public sealed class RoundManager
+    public sealed class TimeManager
     {
         private bool _isStarted;
         private float _timer;
@@ -17,7 +17,7 @@ namespace Bubbles
         public event RoundHandler RoundStarted;
         public event RoundHandler RoundEnded;
         
-        public RoundManager()
+        public TimeManager()
         {
             _roundSettings = SceneContext.Instance.RoundSettings;
             _updateManager = SceneContext.Instance.UpdateManager;

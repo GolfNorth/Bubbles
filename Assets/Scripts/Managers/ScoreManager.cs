@@ -8,27 +8,27 @@ namespace Bubbles
         private float _score;
         private readonly DifficultSettings _difficultSettings;
         private readonly ScoreSettings _scoreSettings;
-        private readonly RoundManager _roundManager;
+        private readonly TimeManager _timeManager;
         private readonly BubblesManager _bubblesManager;
         
         public ScoreManager()
         {
             _difficultSettings = SceneContext.Instance.DifficultSettings;
             _scoreSettings = SceneContext.Instance.ScoreSettings;
-            _roundManager = SceneContext.Instance.RoundManager;
+            _timeManager = SceneContext.Instance.TimeManager;
             _bubblesManager = SceneContext.Instance.BubblesManager;
             
             _bubblesManager.BubbleDestroyed += OnBubbleDestroyed;
-            _roundManager.RoundStarted += OnRoundStarted;
+            _timeManager.RoundStarted += OnTimeStarted;
         }
         
         public void Dispose()
         {
             _bubblesManager.BubbleDestroyed -= OnBubbleDestroyed;
-            _roundManager.RoundStarted -= OnRoundStarted;
+            _timeManager.RoundStarted -= OnTimeStarted;
         }
 
-        private void OnRoundStarted()
+        private void OnTimeStarted()
         {
             _score = 0;
         }

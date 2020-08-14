@@ -1,36 +1,30 @@
-﻿using UnityEngine;
-
-namespace Bubbles
+﻿namespace Bubbles
 {
-    public class BubbleView : MonoBehaviour
+    public class BubbleView : BaseView<BubbleController>
     {
-        private BubbleController _controller;
-
-        public BubbleController Controller => _controller;
-
         private void Awake()
         {
-            _controller = new BubbleController(gameObject);
+            controller = new BubbleController(gameObject);
         }
 
         private void OnDestroy()
         {
-            _controller.Dispose();
+            controller.Dispose();
         }
 
         private void OnDisable()
         {
-            _controller.Disable();
+            controller.Disable();
         }
 
         private void OnEnable()
         {
-            _controller.Enable();
+            controller.Enable();
         }
 
         private void OnMouseDown()
         {
-            _controller.Hit();
+            controller.Hit();
         }
     }
 }

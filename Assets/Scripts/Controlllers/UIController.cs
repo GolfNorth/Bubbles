@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 namespace Bubbles
 {
-    public sealed class UIController : ITickable, IDisposable
+    public sealed class UIController : IController<UIController>, ITickable
     {
         private Text _scoreComponent;
         private Text _timerComponent;
         private Text _gameOverComponent;
         private Text _countdownComponent;
-        private readonly RoundManager _roundManager;
+        private readonly TimeManager _timeManager;
         private readonly ScoreManager _scoreManager;
         private readonly UpdateManager _updateManager;
 
@@ -21,10 +21,10 @@ namespace Bubbles
             _gameOverComponent = gameOverComponent;
             _countdownComponent = countdownComponent;
             
-            _roundManager = SceneContext.Instance.RoundManager;
-            _roundManager.RoundCountdown += OnRoundCountdown;
-            _roundManager.RoundStarted += OnRoundStarted;
-            _roundManager.RoundEnded += OnRoundEnded;
+            _timeManager = SceneContext.Instance.TimeManager;
+            _timeManager.RoundCountdown += OnTimeCountdown;
+            _timeManager.RoundStarted += OnTimeStarted;
+            _timeManager.RoundEnded += OnTimeEnded;
 
             _scoreManager = SceneContext.Instance.ScoreManager;
 
@@ -39,26 +39,26 @@ namespace Bubbles
 
         public void Dispose()
         {
-            _roundManager.RoundCountdown -= OnRoundCountdown;
-            _roundManager.RoundStarted -= OnRoundStarted;
-            _roundManager.RoundEnded -= OnRoundEnded;
+            _timeManager.RoundCountdown -= OnTimeCountdown;
+            _timeManager.RoundStarted -= OnTimeStarted;
+            _timeManager.RoundEnded -= OnTimeEnded;
             _updateManager.Remove(this);
         }
         
-        private void OnRoundCountdown()
+        private void OnTimeCountdown()
         {
             _gameOverComponent.gameObject.SetActive(false);
             _countdownComponent.gameObject.SetActive(true);
         }
 
-        private void OnRoundStarted()
+        private void OnTimeStarted()
         {
             _scoreComponent.gameObject.SetActive(true);
             _timerComponent.gameObject.SetActive(true);
             _countdownComponent.gameObject.SetActive(false);
         }
 
-        private void OnRoundEnded()
+        private void OnTimeEnded()
         {
             _scoreComponent.gameObject.SetActive(false);
             _timerComponent.gameObject.SetActive(false);
@@ -70,18 +70,18 @@ namespace Bubbles
 
         public void Tick()
         {
-            switch (_roundManager.GameState)
+            switch (_timeManager.GameState)
             {
                 case GameState.Countdown:
-                    _countdownComponent.text = _roundManager.Countdown.ToString();
+                    _countdownComponent.text = _timeManager.Countdown.ToString();
                     break;
                 case GameState.Started:
                     _scoreComponent.text = $"Score: {_scoreManager.Score}";
-                    _timerComponent.text = $"Timer: {_roundManager.Timer}";
+                    _timerComponent.text = $"Timer: {_timeManager.Timer}";
                     break;
                 case GameState.Ended:
                     if (Input.anyKey)
-                        _roundManager.Start();
+                        _timeManager.Start();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

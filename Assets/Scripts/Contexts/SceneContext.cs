@@ -10,13 +10,13 @@ namespace Bubbles
         [SerializeField] private GameObject _bubblePrefab;
         
         private UpdateManager _updateManager;
-        private RoundManager _roundManager;
+        private TimeManager _timeManager;
         private BubblesManager _bubblesManager;
         private ScoreManager _scoreManager;
 
         public UpdateManager UpdateManager => _updateManager;
 
-        public RoundManager RoundManager => _roundManager;
+        public TimeManager TimeManager => _timeManager;
 
         public BubblesManager BubblesManager => _bubblesManager;
 
@@ -33,7 +33,7 @@ namespace Bubbles
         private void Awake()
         {
             _updateManager = new UpdateManager();
-            _roundManager = new RoundManager();
+            _timeManager = new TimeManager();
             _bubblesManager = new BubblesManager();
             _scoreManager = new ScoreManager();
         }

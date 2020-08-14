@@ -8,7 +8,7 @@ namespace Bubbles
     {
         private readonly List<BubbleController> _bubbleControllers;
         private readonly ObjectPool _objectPool;
-        private readonly RoundManager _roundManager;
+        private readonly TimeManager _timeManager;
         private readonly UpdateManager _updateManager;
         private readonly DifficultSettings _difficultSettings;
         private float _passedAfterSpawn;
@@ -22,26 +22,26 @@ namespace Bubbles
             _objectPool = new ObjectPool(SceneContext.Instance.BubblePrefab);
 
             _difficultSettings = SceneContext.Instance.DifficultSettings;
-            _roundManager = SceneContext.Instance.RoundManager;
-            _roundManager.RoundEnded += OnRoundEnded;
+            _timeManager = SceneContext.Instance.TimeManager;
+            _timeManager.RoundEnded += OnTimeEnded;
             _updateManager = SceneContext.Instance.UpdateManager;
             _updateManager.Add(this);
         }
 
         public void Dispose()
         {
-            _roundManager.RoundEnded -= OnRoundEnded;
+            _timeManager.RoundEnded -= OnTimeEnded;
             _updateManager.Remove(this);
         }
 
-        private void OnRoundEnded()
+        private void OnTimeEnded()
         {
             DestroyAll();
         }
 
         public void Tick()
         {
-            if (!_roundManager.IsStarted || _bubbleControllers.Count >= _difficultSettings.MaxAmount) return;
+            if (!_timeManager.IsStarted || _bubbleControllers.Count >= _difficultSettings.MaxAmount) return;
 
             _passedAfterSpawn += Time.deltaTime;
             
@@ -66,7 +66,7 @@ namespace Bubbles
                 
             _objectPool.Release(controller.GameObject);
             
-            if (_roundManager.IsStarted)
+            if (_timeManager.IsStarted)
                 BubbleDestroyed?.Invoke(controller.Radius);
         }
 

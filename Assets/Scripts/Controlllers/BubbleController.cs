@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Bubbles
 {
-    public class BubbleController : ITickable, IDisposable
+    public class BubbleController : IController<BubbleController>, ITickable
     {
         private bool _active;
         private BubbleModel _model;
